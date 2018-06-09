@@ -1,5 +1,8 @@
 var express = require("express"),
-    bodyParser = require("body-parser");
+    bodyParser = require("body-parser"),
+    mongoose = require("mongoose");
+
+mongoose.connect("mongodb://localhost/an-express-blog");
 
 var app = express();
 
