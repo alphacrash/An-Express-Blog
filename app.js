@@ -34,7 +34,7 @@ app.get("/posts", function (req, res) {
             console.log(err);
             res.redirect("/");
         } else {
-            res.render("posts", { posts: allPosts });
+            res.render("posts/posts", { posts: allPosts });
         }
     });
 });
@@ -52,6 +52,17 @@ app.post("/posts", function (req, res) {
             console.log(err);
         } else {
             res.redirect("/posts");
+        }
+    });
+});
+
+// Show post
+app.get("/posts/:id", function (req, res) {
+    Post.findById(req.params.id, function (err, foundPost) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("posts/show", { post: foundPost });
         }
     });
 });

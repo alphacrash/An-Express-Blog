@@ -3,3 +3,9 @@
     height: 15vw;
     object-fit: cover;
 }
+
+#detail_img {
+    width: 95%;
+    height: 50vw;
+    border-radius: 5px;
+}

@@ -1,0 +1,22 @@
+<% include ../partials/header.ejs %>
+
+
+<div class="container bg-light">
+    <div class="thumbnail">
+        <img class="img-responsive m-4" id="detail_img" src="<%= post.image %>">
+        <div class="caption-full m-4">
+            <h3><%= post.title %></h3>
+            <p class="float-right">
+                <small class="text-muted">Added <%= post.created.toDateString() %></small>
+            </p>
+            <p>
+                <em>Submitted By SUD</em>
+            </p>
+            <p>
+                <%= post.content %>
+            </p>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer.ejs %>
