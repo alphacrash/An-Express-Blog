@@ -14,8 +14,14 @@ app.get("/", function (req, res) {
     res.render("index");
 });
 
+var posts = [
+    { title: "Just lying on the ground", image: "https://cdn.stocksnap.io/img-thumbs/960w/GGQVLCTSWI.jpg" },
+    { title: "Foot in sand", image: "https://cdn.stocksnap.io/img-thumbs/960w/YRI8K6RLX2.jpg" },
+    { title: "Make it happen", image: "https://cdn.stocksnap.io/img-thumbs/960w/YEW4VFXSIG.jpg" }
+];
+
 app.get("/posts", function (req, res) {
-    res.render("posts");
+    res.render("posts", { posts: posts });
 });
 
 app.listen(3000, function () {
