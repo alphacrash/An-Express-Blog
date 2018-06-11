@@ -1,6 +1,9 @@
 var express = require("express"),
     bodyParser = require("body-parser"),
-    mongoose = require("mongoose");
+    mongoose = require("mongoose"),
+    Post = require("./models/post"),
+    Comment = require("./models/comment"),
+    seedDB = require("./seed");
 
 mongoose.connect("mongodb://localhost/an-express-blog");
 
@@ -9,18 +12,7 @@ var app = express();
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
-
-var postSchema = new mongoose.Schema({
-    title: String,
-    image: String,
-    content: String,
-    created: {
-        type: Date,
-        default: Date.now
-    }
-});
-
-var Post = mongoose.model("Post", postSchema);
+seedDB();
 
 // Index Page
 app.get("/", function (req, res) {
@@ -58,7 +50,7 @@ app.post("/posts", function (req, res) {
 
 // Show post
 app.get("/posts/:id", function (req, res) {
-    Post.findById(req.params.id, function (err, foundPost) {
+    Post.findById(req.params.id).populate("comments").exec(function (err, foundPost) {
         if (err) {
             console.log(err);
         } else {
