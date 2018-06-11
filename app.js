@@ -11,7 +11,11 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", function (req, res) {
-    res.send("Home Page");
+    res.render("index");
+});
+
+app.get("/posts", function (req, res) {
+    res.render("posts");
 });
 
 app.listen(3000, function () {
