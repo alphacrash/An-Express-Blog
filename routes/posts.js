@@ -7,7 +7,7 @@ var middlewareObj = require("../middleware");
 router.get("/", function (req, res) {
     Post.find({}, function (err, allPosts) {
         if (err) {
-            console.log(err);
+            req.flash("error", err.message); 
             res.redirect("/");
         } else {
             res.render("posts/posts", { posts: allPosts });
@@ -29,7 +29,7 @@ router.post("/", middlewareObj.isLoggedIn, function (req, res) {
 
     Post.create(newPost, function (err, newlyCreated) {
         if (err) {
-            console.log(err);
+            req.flash("error", err.message); 
         } else {
             res.redirect("/posts");
         }
@@ -40,7 +40,7 @@ router.post("/", middlewareObj.isLoggedIn, function (req, res) {
 router.get("/:id", function (req, res) {
     Post.findById(req.params.id).populate("comments").exec(function (err, foundPost) {
         if (err) {
-            console.log(err);
+            req.flash("error", err.message); 
         } else {
             res.render("posts/show", { post: foundPost });
         }
@@ -57,6 +57,7 @@ router.get("/:id/edit", middlewareObj.checkPostOwnership, function (req, res) {
 router.put("/:id", middlewareObj.checkPostOwnership, function (req, res) {
     Post.findByIdAndUpdate(req.params.id, req.body.post, function (err, foundPost) {
         if (err) {
+            req.flash("error", err.message); 
             res.redirect("/posts");
         } else {
             res.redirect("/posts/" + req.params.id);
@@ -68,6 +69,7 @@ router.put("/:id", middlewareObj.checkPostOwnership, function (req, res) {
 router.delete("/:id", middlewareObj.checkPostOwnership, function (req, res) {
     Post.findByIdAndRemove(req.params.id, function (err) {
         if (err) {
+            req.flash("error", err.message); 
             res.redirect("/posts");
         } else {
             res.redirect("/posts");

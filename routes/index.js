@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var passport = require("passport");
 var User = require("../models/user");
-var middlewareObj = require("../middleware"); 
+var middlewareObj = require("../middleware");
 
 // Index Page
 router.get("/", function (req, res) {
@@ -17,10 +17,11 @@ router.post("/register", function (req, res) {
     var newUser = new User({ username: req.body.username });
     User.register(newUser, req.body.password, function (err, user) {
         if (err) {
-            console.log(err);
+            req.flash("error", err.message); 
             return res.redirect("back");
         } else {
             passport.authenticate("local")(req, res, function () {
+                req.flash("success", "Welcome to Express Blog");
                 res.redirect("/posts");
             });
         }
@@ -38,6 +39,7 @@ router.post("/login", passport.authenticate("local", {
 
 router.get("/logout", function (req, res) {
     req.logout();
+    req.flash("success", "You have been successfully logged out.");
     res.redirect("/");
 });
 
