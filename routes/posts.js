@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var Post = require("../models/post");
+var middlewareObj = require("../middleware"); 
 
 // Archives
 router.get("/", function (req, res) {
@@ -15,11 +16,11 @@ router.get("/", function (req, res) {
 });
 
 // Create new post
-router.get("/new", isLoggedIn, function (req, res) {
+router.get("/new", middlewareObj.isLoggedIn, function (req, res) {
     res.render("posts/new");
 });
 
-router.post("/", isLoggedIn, function (req, res) {
+router.post("/", middlewareObj.isLoggedIn, function (req, res) {
     var author = {
         id: req.user._id,
         username: req.user.username
@@ -47,13 +48,13 @@ router.get("/:id", function (req, res) {
 });
 
 // Edit
-router.get("/:id/edit", checkPostOwnership, function (req, res) {
+router.get("/:id/edit", middlewareObj.checkPostOwnership, function (req, res) {
     Post.findById(req.params.id, function (err, foundPost) {
         res.render("posts/edit", { post: foundPost });
     })
 });
 
-router.put("/:id", checkPostOwnership, function (req, res) {
+router.put("/:id", middlewareObj.checkPostOwnership, function (req, res) {
     Post.findByIdAndUpdate(req.params.id, req.body.post, function (err, foundPost) {
         if (err) {
             res.redirect("/posts");
@@ -64,7 +65,7 @@ router.put("/:id", checkPostOwnership, function (req, res) {
 });
 
 // Delete
-router.delete("/:id", checkPostOwnership, function (req, res) {
+router.delete("/:id", middlewareObj.checkPostOwnership, function (req, res) {
     Post.findByIdAndRemove(req.params.id, function (err) {
         if (err) {
             res.redirect("/posts");
@@ -73,32 +74,5 @@ router.delete("/:id", checkPostOwnership, function (req, res) {
         }
     });
 });
-
-// Middleware
-
-function checkPostOwnership(req, res, next) {
-    if (req.isAuthenticated()) {
-        Post.findById(req.params.id, function (err, foundPost) {
-            if (err) {
-                res.redirect("/posts");
-            } else {
-                if (foundPost.author.id.equals(req.user._id)) {
-                    next();
-                } else {
-                    res.redirect("back");
-                }
-            }
-        });
-    } else {
-        res.redirect("back");
-    }
-}
-
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-}
 
 module.exports = router;
