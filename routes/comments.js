@@ -4,7 +4,6 @@ var Post = require("../models/post");
 var Comment = require("../models/comment");
 
 router.get("/new", isLoggedIn, function (req, res) {
-    console.log(req.params.id);
     Post.findById(req.params.id, function (err, foundPost) {
         if (err) {
             console.log(err);
@@ -33,6 +32,37 @@ router.post("/", function (req, res) {
             });
         }
     });
+});
+
+// Edit
+router.get("/:comment_id/edit", function (req, res) {
+    Comment.findById(req.params.comment_id, function (err, foundComment) {
+        if (err) {
+            res.redirect("back");
+        } else {
+            res.render("comments/edit", { post_id: req.params.id, comment: foundComment });
+        }
+    });
+});
+
+router.put("/:comment_id", function (req, res) {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function (err, updatedComment) {
+        if (err) {
+            res.redirect("back");
+        } else {
+            res.redirect("/posts/" + req.params.id);
+        }
+    });
+});
+
+router.delete("/:comment_id", function (req, res) {
+    Comment.findByIdAndRemove(req.params.comment_id, function (err) {
+        if (err) {
+            res.redirect("back");
+        } else {
+            res.redirect("back");
+        }
+    })
 });
 
 function isLoggedIn(req, res, next) {

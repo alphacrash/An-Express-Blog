@@ -46,6 +46,54 @@ router.get("/:id", function (req, res) {
     });
 });
 
+// Edit
+router.get("/:id/edit", checkPostOwnership, function (req, res) {
+    Post.findById(req.params.id, function (err, foundPost) {
+        res.render("posts/edit", { post: foundPost });
+    })
+});
+
+router.put("/:id", checkPostOwnership, function (req, res) {
+    Post.findByIdAndUpdate(req.params.id, req.body.post, function (err, foundPost) {
+        if (err) {
+            res.redirect("/posts");
+        } else {
+            res.redirect("/posts/" + req.params.id);
+        }
+    });
+});
+
+// Delete
+router.delete("/:id", checkPostOwnership, function (req, res) {
+    Post.findByIdAndRemove(req.params.id, function (err) {
+        if (err) {
+            res.redirect("/posts");
+        } else {
+            res.redirect("/posts");
+        }
+    });
+});
+
+// Middleware
+
+function checkPostOwnership(req, res, next) {
+    if (req.isAuthenticated()) {
+        Post.findById(req.params.id, function (err, foundPost) {
+            if (err) {
+                res.redirect("/posts");
+            } else {
+                if (foundPost.author.id.equals(req.user._id)) {
+                    next();
+                } else {
+                    res.redirect("back");
+                }
+            }
+        });
+    } else {
+        res.redirect("back");
+    }
+}
+
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();

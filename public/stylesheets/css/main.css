@@ -9,3 +9,7 @@
     height: 50vw;
     border-radius: 5px;
 }
+
+#delete-form {
+    display: inline;
+}
