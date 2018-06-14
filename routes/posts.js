@@ -20,7 +20,11 @@ router.get("/new", isLoggedIn, function (req, res) {
 });
 
 router.post("/", isLoggedIn, function (req, res) {
-    var newPost = req.body.post;
+    var author = {
+        id: req.user._id,
+        username: req.user.username
+    };
+    var newPost = { title: req.body.title, image: req.body.image, content: req.body.content, author: author }
 
     Post.create(newPost, function (err, newlyCreated) {
         if (err) {

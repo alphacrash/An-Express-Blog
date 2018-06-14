@@ -4,10 +4,6 @@
     <h1 class="mt-4 mb-4">Add comment to "<%= post.title %>"</h1>
     <form class="ml-4" action="/posts/<%= post._id %>/comments/" method="POST">
         <div class="form-group">
-            <label>Author</label>
-            <input class="form-control" type="text" name="comment[author]" placeholder="Author's name">
-        </div>
-        <div class="form-group">
             <label>Comment</label>
             <input class="form-control" type="text" name="comment[text]" placeholder="Enter comment">
         </div>
