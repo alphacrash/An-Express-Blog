@@ -59,6 +59,37 @@ app.get("/posts/:id", function (req, res) {
     });
 });
 
+// COMMENTS
+
+// Create comments
+app.get("/posts/:id/:comments/:comment_id", function (req, res) {
+    Post.findById(req.params.id, function (err, foundPost) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("comments/new", { post: foundPost });
+        }
+    });
+});
+
+app.post("/posts/:id/comments", function (req, res) {
+    Post.findById(req.params.id, function (err, foundPost) {
+        if (err) {
+            console.log(err);
+        } else {
+            Comment.create(req.body.comment, function (err, comment) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    foundPost.comments.push(comment);
+                    foundPost.save();
+                    res.redirect("/posts/" + foundPost._id);
+                }
+            });
+        }
+    });
+});
+
 app.listen(3000, function () {
     console.log("Server is running...");
 });
