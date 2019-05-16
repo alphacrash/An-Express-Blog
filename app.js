@@ -14,7 +14,8 @@ var indexRoutes = require("./routes/index"),
     postRoutes = require("./routes/posts"),
     commentRoutes = require("./routes/comments");
 
-mongoose.connect("mongodb://localhost/an-express-blog");
+var url = process.env.DATABASEURL || "mongodb://localhost/express-blog";
+mongoose.connect(url);
 
 var app = express();
 
@@ -50,6 +51,10 @@ app.use("/posts", postRoutes);
 app.use("/posts/:id/comments/", commentRoutes);
 
 // SERVER
-app.listen(3000, function () {
-    console.log("Server is running...");
-});
+app.listen(process.env.PORT, process.env.IP, function () {
+    console.log("Server is running.")
+})
+
+// app.listen(3000, function () {
+//     console.log("Server is running...");
+// });
