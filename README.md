@@ -1,6 +1,8 @@
 # An Express Blog
 
-It is a blog content management system.
+A simple blog that is made with express and mongodb which has user authentication, CRUD feature for posts and comments.
+
+https://alphacrash-blog.herokuapp.com/
 
 ## Requirements:
 
